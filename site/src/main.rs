@@ -1,6 +1,9 @@
 use yew::functional::*;
 use yew::prelude::*;
 use yew_router::prelude::*;
+use yew::virtual_dom::VNode;
+
+mod generated;
 
 #[derive(Clone, Routable, PartialEq)]
 enum Route {
@@ -9,7 +12,7 @@ enum Route {
     #[at("/about")]
     About,
     #[at("/posts")]
-    Posts,
+    Blogs,
     #[not_found]
     #[at("/404")]
     NotFound,
@@ -30,11 +33,16 @@ fn about() -> Html {
     }
 }
 
-#[function_component(Posts)]
+#[function_component(Blogs)]
 fn posts() -> Html {
+    let posts = generated::posts::Posts::new();
+
     html! {
         <>
             <p1>{ "There are no posts yet... this will be one" }</p1>
+            {
+                for posts.posts.iter().map(|(key, val)| html_nested! { <><>{ format!("{key}") }</><>{val.clone()}</></> } )
+            }
             <div>
                 <Link<Route> to={Route::Home}>{ "Home" }</Link<Route>>
             </div>
@@ -51,7 +59,7 @@ fn home() -> Html {
             <p>{ "Starting to document projects when I remember to... halfway through them" }</p>
             <div>
                 <div>
-                    <Link<Route> to={Route::Posts}>{ "Posts" }</Link<Route>>
+                    <Link<Route> to={Route::Blogs}>{ "Posts" }</Link<Route>>
                 </div>
                 <div>
                     <Link<Route> to={Route::About}>{ "About" }</Link<Route>>
@@ -65,7 +73,7 @@ fn switch(routes: Route) -> Html {
     match routes {
         Route::Home => html! { <Home/> },
         Route::About => html! { <About/> },
-        Route::Posts => html! { <Posts/> },
+        Route::Blogs => html! { <Blogs/> },
         Route::NotFound => html! { <h1>{ "404 Not Found :(" }</h1> },
     }
 }
