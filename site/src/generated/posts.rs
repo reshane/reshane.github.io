@@ -5,23 +5,23 @@ impl Posts {
     pub fn new() -> Self {
         let mut post_map = HashMap::<String, Html>::new();
     	post_map.insert(String::from("image_resizing_20241106"), html! {<span markdown="block" style="white-space: pre-wrap"><div markdown="span">
-<div>{ r#"# Image resizing blog"# }</div>
+<h1>{ r#"Image resizing blog"# }</h1>
 <div>{ r#""# }</div>
 <div>{ r#"Start by creating cargo project"# }</div>
 </div>
-<img src={"build/image_resizing_20241106/images/1_aw_nutz.png"}/>
+<img src={"/build/image_resizing_20241106/images/1_aw_nutz.png"}/>
 <div>
 <div>{ r#""# }</div>
 <div>{ r#"copy shell.nix from another project & start the shell"# }</div>
 <div>{ r#""# }</div>
 <div>{ r#"where is my fish?"# }</div>
 </div>
-<img src={"build/image_resizing_20241106/images/2_where_my_fish.png"}/>
+<img src={"/build/image_resizing_20241106/images/2_where_my_fish.png"}/>
 <div>
 <div>{ r#""# }</div>
 <div>{ r#"exit that shell"# }</div>
 </div><video autoplay=true width=500 loop=true>
-<source src={"build/image_resizing_20241106/images/3_exit_dirty_bash.webm"} type="video/webm"/>
+<source src={"/build/image_resizing_20241106/images/3_exit_dirty_bash.webm"} type="video/webm"/>
 </video><div>
 <div>{ r#""# }</div>
 <div>{ r#"look up youtube video"# }</div>
@@ -84,11 +84,11 @@ async fn resize(task: Query<Task>) -> (StatusCode, Bytes) {
 "# }}</code></pre>
 <div>{ r#"when we run it, we get this in the logs: "# }</div>
 </div>
-<img src={"build/image_resizing_20241106/images/4_create_project.png"}/>
+<img src={"/build/image_resizing_20241106/images/4_create_project.png"}/>
 <div>
 <div>{ r#"and we get this back when we send a request:"# }</div>
 </div>
-<img src={"build/image_resizing_20241106/images/5_first_response.png"}/>
+<img src={"/build/image_resizing_20241106/images/5_first_response.png"}/>
 <div>
 <div>{ r#""# }</div>
 <div>{ r#"Now, we'll write a module that fetches images for us and returns them in a DynamicImage"# }</div>
@@ -97,7 +97,7 @@ async fn resize(task: Query<Task>) -> (StatusCode, Bytes) {
 <div>{ r#"We'll also introduce an error module to make using the `?` easier."# }</div>
 <div>{ r#"And just like that our structure looks like this:"# }</div>
 </div>
-<img src={"build/image_resizing_20241106/images/6_new_file_structure.png"}/>
+<img src={"/build/image_resizing_20241106/images/6_new_file_structure.png"}/>
 <div>
 <div>{ r#"And our `src/error.rs` looks like this:"# }</div>
 <pre><code>{{ r#"
@@ -267,17 +267,17 @@ curl \
 "# }}</code></pre>
 <div>{ r#"and then we can `cargo r` and `./test_curl` to see if it works"# }</div>
 </div>
-<img src={"build/image_resizing_20241106/images/7_test_curl_logs.png"}/>
+<img src={"/build/image_resizing_20241106/images/7_test_curl_logs.png"}/>
 <div>
 </div>
-<img src={"build/image_resizing_20241106/images/8_test_curl_output.png"}/>
+<img src={"/build/image_resizing_20241106/images/8_test_curl_output.png"}/>
 <div>
 <div>{ r#"Great!"# }</div>
 <div>{ r#"Now to actually resize the image..."# }</div>
 <div>{ r#"This functionality should definitely be put into another module - we're no longer dealing with http requests."# }</div>
 <div>{ r#"So we create a new module img which will contain all of our image parsing and manipulation stuff"# }</div>
 </div>
-<img src={"build/image_resizing_20241106/images/9_new_img_module.png"}/>
+<img src={"/build/image_resizing_20241106/images/9_new_img_module.png"}/>
 <div>
 <div>{ r#"And insize `img/resizer.rs` we can add something like this to get it resizing images..."# }</div>
 <pre><code>{{ r#"
@@ -342,7 +342,7 @@ async fn resize(Query(task): Query<Task>) -> impl IntoResponse {
 <div>{ r#"And now we can update our `test_curl` script to include a `width` and `height` parameters"# }</div>
 <div>{ r#"And just like that we have a slightly wider peppermint butler"# }</div>
 </div>
-<img src={"build/image_resizing_20241106/images/10_wide_pep_but.png"}/>
+<img src={"/build/image_resizing_20241106/images/10_wide_pep_but.png"}/>
 <div>
 <div>{ r#""# }</div>
 </div></span>});
