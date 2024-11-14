@@ -1,7 +1,6 @@
 use yew::functional::*;
 use yew::prelude::*;
 use yew_router::prelude::*;
-use yew::virtual_dom::VNode;
 
 mod generated;
 
@@ -39,7 +38,7 @@ fn posts() -> Html {
 
     html! {
         <>
-            <p1>{ "There are no posts yet... this will be one" }</p1>
+            <h1>{ "Posts" }</h1>
             {
                 for posts.posts.iter().map(|(key, val)| html_nested! { <><>{ format!("{key}") }</><>{val.clone()}</></> } )
             }

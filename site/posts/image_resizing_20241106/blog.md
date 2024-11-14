@@ -9,7 +9,7 @@ where is my fish?
 {{ images/2_* }}
 
 exit that shell
-{{ images/3_* }}
+{{ videos/3_* }}
 
 look up youtube video
  - https://www.youtube.com/watch?v=tv9s4jhdUpU
