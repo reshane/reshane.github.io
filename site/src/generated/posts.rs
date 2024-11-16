@@ -148,8 +148,72 @@ a[0] * b[2] + a[1] * b[1] + a[2] * b[0]
 a[1] * b[9] + a[2] * b[8] * a[3] * b[7] ... 
 a[2] * b[9] + a[3] * b[8] * a[4] * b[7] ... 
 "# }}</code></pre>
-<div>{ r#""# }</div>
-<div>{ r#""# }</div>
+<div>{ r#"And after lots of thought and effort, we can write this function:"# }</div>
+<pre><code>{{ r#"
+Vector_i* Vector_i_convolve(Vector_i* a, Vector_i* b) {
+    Vector_i* result = Vector_i_new();
+
+    int a_size = Vector_i_size(a);
+    int b_size = Vector_i_size(b);
+
+    int a_start = 0, b_start = 0;
+    for (int i=0; i<a_size+b_size; ++i) {
+        int j=a_start,k=b_start,total=0;
+        while (j<a_size && k>-1) {
+            total += Vector_i_get(a, j) * Vector_i_get(b, k);
+            j++;
+            k--;
+        }
+        Vector_i_push(result, total);
+        if (b_start == b_size-1) {
+            a_start++;
+        } else {
+            b_start++;
+        }
+    }
+
+    return result;
+}
+"# }}</code></pre>
+<div>{ r#"and then we can try it out in our main:"# }</div>
+<div>{ r#"(Note that I have DEBUG in a `#define` statement above main to turn the printing on/off"# }</div>
+<pre><code>{{ r#"
+int main() {
+    Vector_i* base = Vector_i_new();
+    Vector_i* mask = Vector_i_new();
+
+    for (int i = 0; i < SIZE; ++i) {
+        Vector_i_push(base, i);
+        if (DEBUG) printf("vector contents\n\tsize: %d\n\tcap: %d\n\tlast: %d\n", base->size, base->capacity, base->data[base->size-1]);
+        Vector_i_push(mask, i);
+        if (DEBUG) printf("vector contents\n\tsize: %d\n\tcap: %d\n\tlast: %d\n", mask->size, mask->capacity, mask->data[mask->size-1]);
+    }
+
+    if (DEBUG) printf("vector contents\n\tsize: %d\n\tcap: %d\n\tlast: %d\n", base->size, base->capacity, base->data[base->size-1]);
+    if (DEBUG) printf("vector contents\n\tsize: %d\n\tcap: %d\n\tlast: %d\n", mask->size, mask->capacity, mask->data[mask->size-1]);
+
+    Vector_i* result = Vector_i_convolve(base, mask);
+
+    if (1) {
+        printf("[");
+        for (int i = 0; i < Vector_i_size(result); ++i) {
+            printf("%d", Vector_i_get(result, i));
+            if (i+1 != Vector_i_size(result)) printf(",");
+        }
+        printf("]");
+    }
+
+    Vector_i_free(base);
+    Vector_i_free(mask);
+    Vector_i_free(result);
+
+    return 0;
+}
+"# }}</code></pre>
+<div>{ r#"And with `DEBUG = 0`, when we `./build.sh && ./build/main`"# }</div>
+</div>
+<img src={"/build/convolution_20241113/images/7_vector_out_initial.png"}/>
+<div>
 <div>{ r#""# }</div>
 </div></span>});	post_map.insert(String::from("image_resizing_20241106"), html! {<span markdown="block" style="white-space: pre-wrap"><div markdown="span">
 <h1>{ r#"Image resizing blog"# }</h1>
