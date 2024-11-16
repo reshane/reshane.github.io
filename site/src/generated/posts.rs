@@ -4,7 +4,154 @@ pub struct Posts { pub posts: HashMap::<String, Html> }
 impl Posts {
     pub fn new() -> Self {
         let mut post_map = HashMap::<String, Html>::new();
-    	post_map.insert(String::from("image_resizing_20241106"), html! {<span markdown="block" style="white-space: pre-wrap"><div markdown="span">
+    	post_map.insert(String::from("convolution_20241113"), html! {<span markdown="block" style="white-space: pre-wrap"><div markdown="span">
+<h1>{ r#"Convlution"# }</h1>
+<div>{ r#"I want to do some convolution stuff in c because it seems fun."# }</div>
+<div>{ r#"So I start by making a project and taking some screenshots for this blog I guess."# }</div>
+</div>
+<img src={"/build/convolution_20241113/images/0_file_structure.png"}/>
+<div>
+</div>
+<img src={"/build/convolution_20241113/images/1_initial_main_c.png"}/>
+<div>
+</div>
+<img src={"/build/convolution_20241113/images/2_initial_convolve_h.png"}/>
+<div>
+</div>
+<img src={"/build/convolution_20241113/images/3_initial_convolve_c.png"}/>
+<div>
+<div>{ r#"Now to figure out how to build all of it..."# }</div>
+<div>{ r#"{{ link/[To stack overflow!|https://stackoverflow.com/questions/1705961/how-to-link-to-a-static-library-in-c] }}"# }</div>
+<div>{ r#"And we end up with this:"# }</div>
+</div>
+<img src={"/build/convolution_20241113/images/4_build_script_initial.png"}/>
+<div>
+<div>{ r#"Which allows us to do this: "# }</div>
+</div><video autoplay=true width=500 loop=true>
+<source src={"/build/convolution_20241113/images/5_initial_run.webm"} type="video/webm"/>
+</video><div>
+<div>{ r#"Great! Now let's warm up with some light convolution before starting the crazy stuff..."# }</div>
+<div>{ r#"For that I'm going to write a data structure to help out a little"# }</div>
+</div>
+<img src={"/build/convolution_20241113/images/6_int_vector.png"}/>
+<div>
+<div>{ r#"Admitedly, the naming of this thing is not great, but refactoring is a beautiful thing that I expect to do a lot of later."# }</div>
+<div>{ r#"For now, we can just start implementing this."# }</div>
+<div>{ r#"Most of it is pretty simple, malloc for our structure once and then malloc/realloc for our data once the capacity is exceeded..."# }</div>
+<pre><code>{{ r#"
+// vector
+
+Vector_i* Vector_i_new() {
+    Vector_i* new = (Vector_i*) malloc(sizeof(Vector_i));
+    if (!new) {
+        printf("ERROR: Could initialize vector!");
+        exit(1);
+    }
+    new->size = 0;
+    new->capacity = 0;
+    new->data = NULL;
+    return new;
+}
+
+void Vector_i_push(Vector_i* v, int e) {
+    if (v->capacity == 0) {
+        v->capacity = 1;
+        v->data = (int*) malloc(v->capacity * sizeof(int));
+        if (!v->data) exit(1);
+    }
+    else if (v->size == v->capacity) {
+        v->capacity *= 2;
+        int* newMem = (int*) realloc(v->data, v->capacity * sizeof(int));
+        if (!newMem) {
+            // we have an error here... uh-oh!
+            printf("ERROR: Could not increase the size of the vector");
+            exit(1);
+        }
+        v->data = newMem;
+    }
+    v->data[v->size++] = e;
+}
+
+int Vector_i_get(Vector_i* v, size_t idx) {
+    assert(idx < v->size);
+    return v->data[idx];
+}
+
+size_t Vector_i_size(Vector_i* v) {
+    return v->size;
+}
+
+size_t Vector_i_capacity(Vector_i* v) {
+    return v->capacity;
+}
+
+void Vector_i_free(Vector_i* v) {
+    free(v->data);
+    free(v);
+}
+"# }}</code></pre>
+<div>{ r#"Also important to implement a free function so we aren't leaking a bunch of memory."# }</div>
+<div>{ r#"Even though what I'm going to be using this for will pretty much exclusivly be short-lived programs, just in case I ever use it for something longer, it'll be nice to have this function."# }</div>
+<div>{ r#"And best practices and all that stuff of course."# }</div>
+<div>{ r#"Now for the `Vector_i_convolve` function..."# }</div>
+<div>{ r#"I'll want to take in two vectors to perform the convolution over eachother, so we'll call them a and b"# }</div>
+<div>{ r#"And basically what we'll be doing is something like this:"# }</div>
+<pre><code>{{ r#"
+                           a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+                        a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+                     a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+                  a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+               a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+            a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+         a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+      a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+   a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+   b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+      b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+         b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+            b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+               b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                  b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                     b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+a[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                           b[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+"# }}</code></pre>
+<div>{ r#"where we can imagine flipping b around so that its lowest indices are on the right,"# }</div>
+<div>{ r#"and its 0th index is placed under the 0th index of a"# }</div>
+<div>{ r#"we can then multuply the elements that are 'facing eachother', and shift b to the right"# }</div>
+<div>{ r#"Now, dealing with the pairs of operations should look something like this"# }</div>
+<pre><code>{{ r#"
+a[0] * b[0]
+a[0] * b[1] + a[1] * b[0]
+a[0] * b[2] + a[1] * b[1] + a[2] * b[0]
+...
+a[1] * b[9] + a[2] * b[8] * a[3] * b[7] ... 
+a[2] * b[9] + a[3] * b[8] * a[4] * b[7] ... 
+"# }}</code></pre>
+<div>{ r#""# }</div>
+<div>{ r#""# }</div>
+<div>{ r#""# }</div>
+</div></span>});	post_map.insert(String::from("image_resizing_20241106"), html! {<span markdown="block" style="white-space: pre-wrap"><div markdown="span">
 <h1>{ r#"Image resizing blog"# }</h1>
 <div>{ r#""# }</div>
 <div>{ r#"Start by creating cargo project"# }</div>

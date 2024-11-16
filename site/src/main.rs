@@ -69,7 +69,7 @@ fn blog() -> Html {
         <>
             <h1>{ "Posts" }</h1>
             {
-                for posts.posts.iter().map(|(key, val)| html_nested! { <Link<Route> to={Route::Posts { id: key.clone() }}>{ format!("{key}") }</Link<Route>>} )
+                for posts.posts.iter().map(|(key, val)| html_nested! { <div><Link<Route> to={Route::Posts { id: key.clone() }}>{ format!("{key}") }</Link<Route>></div>} )
             }
             <div>
                 <Link<Route> to={Route::Home}>{ "Home" }</Link<Route>>
