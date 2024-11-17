@@ -59,7 +59,7 @@ fn main() {
     
                 let id = String::from(&input_string[id_s+1..id_e]);
     
-                let image_name = image_names.get(&id).expect("Invalid image reference");
+                let image_name = image_names.get(&id).expect(&format!("Invalid image reference {}", id));
     
                 let image_ref_string = format!("</div>\n<img src={{\"/build/{post_name}/images/{image_name}\"}}/>\n<div>");
     
