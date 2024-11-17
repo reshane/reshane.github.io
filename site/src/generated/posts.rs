@@ -21,7 +21,8 @@ impl Posts {
 <img src={"/build/20241113_convolution/images/3_initial_convolve_c.png"}/>
 <div>
 <div>{ r#"Now to figure out how to build all of it..."# }</div>
-<div>{ r#"{{ link/[To stack overflow!|https://stackoverflow.com/questions/1705961/how-to-link-to-a-static-library-in-c] }}"# }</div>
+<div>{ r#""# }</div><a href={ "https://stackoverflow.com/questions/1705961/how-to-link-to-a-static-library-in-c" }>{ "To stack overflow!" }
+</a><div>{ r#""# }</div>
 <div>{ r#"And we end up with this:"# }</div>
 </div>
 <img src={"/build/20241113_convolution/images/4_build_script_initial.png"}/>
@@ -94,7 +95,8 @@ void Vector_i_free(Vector_i* v) {
 <div>{ r#"Even though what I'm going to be using this for will pretty much exclusivly be short-lived programs, just in case I ever use it for something longer, it'll be nice to have this function."# }</div>
 <div>{ r#"And best practices and all that stuff of course."# }</div>
 <div>{ r#"We can also write a test for it"# }</div>
-<div>{ r#"{{ link/[Thanks to Kay Lack for the little test framework|https://www.youtube.com/watch?v=5aZiRjgSGQU] }}"# }</div>
+<div>{ r#""# }</div><a href={ "https://www.youtube.com/watch?v=5aZiRjgSGQU" }>{ "Thanks to Kay Lack for the little test framework" }
+</a><div>{ r#""# }</div>
 </div>
 <img src={"/build/20241113_convolution/images/8_tests_initial.png"}/>
 <div>

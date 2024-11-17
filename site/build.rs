@@ -101,6 +101,26 @@ fn main() {
                         }
                         start = !start;
                     }
+
+                    while let (Some(s_idx), Some(e_idx)) = (line.find("{{ link/"), line.find(" }}")) {
+                        /*
+                        <div>{ r#"</div><a href="/[To stack overflow!">
+                        https://stackoverflow.com/questions/1705961/how-to-link-to-a-static-library-in-c]
+                        </a><div>"# }</div>
+                        */
+                        let input_string = &line[s_idx..e_idx + 3];
+                        let link_b = input_string.find("/").expect("Links must be / prefixed"); 
+                        let link_b = input_string.find("[").expect("Links must be wrapped in []");
+                        let link_s = input_string.find("|").expect("Link strings and sources must be | delimited");
+                        let link_e = input_string.find("]").expect("Links must be wrapped in []");
+
+                        let link = &input_string[link_s+1..link_e];
+                        let link_string = &input_string[link_b+1..link_s];
+            
+                        let link_ref_string = format!("\"# }}</div><a href={{ \"{link}\" }}>{{ \"{link_string}\" }}\n</a><div>{{ r#\"");
+            
+                        line.replace_range(s_idx..e_idx + 3, &link_ref_string);
+                    }
                     if line.starts_with("#") {
                         line = format!("<h1>{{ r#\"{}\"# }}</h1>", &line[2..]);
                     } else {
