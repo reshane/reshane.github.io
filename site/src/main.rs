@@ -13,7 +13,7 @@ enum Route {
     #[at("/blog")]
     Blog,
     #[at("/posts/:id")]
-    Posts { id: String },
+    Post { id: String },
     #[not_found]
     #[at("/404")]
     NotFound,
@@ -21,39 +21,59 @@ enum Route {
 
 #[function_component(About)]
 fn about() -> Html {
-    let navigator = use_navigator().unwrap();
-
-    let onclick = Callback::from(move |_| navigator.push(&Route::Home));
     html! {
         <>
+            <div>
+                <div>
+                    <Link<Route> to={Route::Home}>{ "Home" }</Link<Route>>
+                </div>
+                <div>
+                    <Link<Route> to={Route::Blog}>{ "Blog" }</Link<Route>>
+                </div>
+            </div>
             <h1>{ "About" }</h1>
             <p>{ "I am shane. I am a software engineer. This is a blog." }</p>
             <p>{ "Written in " } <a href={ "https://www.rust-lang.org" }> { "rust" } </a> { " with " } <a href={ "https://yew.rs" }> { "yew" } </a> { "." }</p>
-            <button {onclick}>{ "Go Home" }</button>
         </>
     }
 }
 
 #[derive(Properties, PartialEq)]
-struct PostsProps {
+struct PostProps {
     id: String,
 }
 
-#[function_component(Posts)]
-fn posts(props: &PostsProps) -> Html {
+#[function_component(Post)]
+fn posts(props: &PostProps) -> Html {
     let posts = generated::posts::Posts::new();
     match posts.posts.get(&props.id) {
         Some(post) => {
             html!{ 
                 <>
-                    <Link<Route> to={Route::Home}>{ "Home" }</Link<Route>>
-                    { " " }
-                    <Link<Route> to={Route::Blog}>{ "Blog" }</Link<Route>>
+                    <div>
+                        <div>
+                            <Link<Route> to={Route::Home}>{ "Home" }</Link<Route>>
+                        </div>
+                        <div>
+                            <Link<Route> to={Route::Blog}>{ "Blog" }</Link<Route>>
+                        </div>
+                        <div>
+                            <Link<Route> to={Route::About}>{ "About" }</Link<Route>>
+                        </div>
+                    </div>
                     { post.clone() }
                     <div>{ "why would you actually read all of that?" }</div>
-                    <Link<Route> to={Route::Home}>{ "Home" }</Link<Route>>
-                    { " " }
-                    <Link<Route> to={Route::Blog}>{ "Blog" }</Link<Route>>
+                    <div>
+                        <div>
+                            <Link<Route> to={Route::Home}>{ "Home" }</Link<Route>>
+                        </div>
+                        <div>
+                            <Link<Route> to={Route::Blog}>{ "Blog" }</Link<Route>>
+                        </div>
+                        <div>
+                            <Link<Route> to={Route::About}>{ "About" }</Link<Route>>
+                        </div>
+                    </div>
                 </>
             }
         },
@@ -65,15 +85,23 @@ fn posts(props: &PostsProps) -> Html {
 fn blog() -> Html {
     let posts = generated::posts::Posts::new();
 
+    let mut posts_names: Vec<&String> = posts.posts.keys().collect::<Vec<&String>>();
+    posts_names.sort_by(|a, b| b.cmp(a));
+
     html! {
         <>
+            <div>
+                <div>
+                    <Link<Route> to={Route::Home}>{ "Home" }</Link<Route>>
+                </div>
+                <div>
+                    <Link<Route> to={Route::About}>{ "About" }</Link<Route>>
+                </div>
+            </div>
             <h1>{ "Posts" }</h1>
             {
-                for posts.posts.iter().map(|(key, val)| html_nested! { <div><Link<Route> to={Route::Posts { id: key.clone() }}>{ format!("{key}") }</Link<Route>></div>} )
+                for posts_names.iter().map(|name| html_nested! { <div><Link<Route> to={Route::Post { id: name.to_string() }}>{ format!("{name}") }</Link<Route>></div>} )
             }
-            <div>
-                <Link<Route> to={Route::Home}>{ "Home" }</Link<Route>>
-            </div>
         </>
     }
 }
@@ -82,9 +110,6 @@ fn blog() -> Html {
 fn home() -> Html {
     html! {
         <>
-            <h1>{ "Reshane" }</h1>
-            <h3>{ "In Medias Res..." }</h3>
-            <p>{ "Starting to document projects when I remember to... halfway through them" }</p>
             <div>
                 <div>
                     <Link<Route> to={Route::Blog}>{ "Blog" }</Link<Route>>
@@ -93,6 +118,8 @@ fn home() -> Html {
                     <Link<Route> to={Route::About}>{ "About" }</Link<Route>>
                 </div>
             </div>
+            <h1>{ "Reshane" }</h1>
+            <p>{ "Welcome to the blog. I write down things I'm learning here" }</p>
         </>
     }
 }
@@ -102,7 +129,7 @@ fn switch(routes: Route) -> Html {
         Route::Home => html! { <Home/> },
         Route::About => html! { <About/> },
         Route::Blog => html! { <Blog/> },
-        Route::Posts { id } => html! { <Posts {id} /> },
+        Route::Post { id } => html! { <Post {id} /> },
         Route::NotFound => html! { <h1>{ "404 Not Found :(" }</h1> },
     }
 }

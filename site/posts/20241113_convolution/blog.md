@@ -1,4 +1,4 @@
-# Convlution
+# Convolution
 I want to do some convolution stuff in c because it seems fun.
 So I start by making a project and taking some screenshots for this blog I guess.
 {{ images/0_* }}

@@ -4,36 +4,36 @@ pub struct Posts { pub posts: HashMap::<String, Html> }
 impl Posts {
     pub fn new() -> Self {
         let mut post_map = HashMap::<String, Html>::new();
-    	post_map.insert(String::from("convolution_20241113"), html! {<span markdown="block" style="white-space: pre-wrap"><div markdown="span">
-<h1>{ r#"Convlution"# }</h1>
+    	post_map.insert(String::from("20241113_convolution"), html! {<span markdown="block" style="white-space: pre-wrap"><div markdown="span">
+<h1>{ r#"Convolution"# }</h1>
 <div>{ r#"I want to do some convolution stuff in c because it seems fun."# }</div>
 <div>{ r#"So I start by making a project and taking some screenshots for this blog I guess."# }</div>
 </div>
-<img src={"/build/convolution_20241113/images/0_file_structure.png"}/>
+<img src={"/build/20241113_convolution/images/0_file_structure.png"}/>
 <div>
 </div>
-<img src={"/build/convolution_20241113/images/1_initial_main_c.png"}/>
+<img src={"/build/20241113_convolution/images/1_initial_main_c.png"}/>
 <div>
 </div>
-<img src={"/build/convolution_20241113/images/2_initial_convolve_h.png"}/>
+<img src={"/build/20241113_convolution/images/2_initial_convolve_h.png"}/>
 <div>
 </div>
-<img src={"/build/convolution_20241113/images/3_initial_convolve_c.png"}/>
+<img src={"/build/20241113_convolution/images/3_initial_convolve_c.png"}/>
 <div>
 <div>{ r#"Now to figure out how to build all of it..."# }</div>
 <div>{ r#"{{ link/[To stack overflow!|https://stackoverflow.com/questions/1705961/how-to-link-to-a-static-library-in-c] }}"# }</div>
 <div>{ r#"And we end up with this:"# }</div>
 </div>
-<img src={"/build/convolution_20241113/images/4_build_script_initial.png"}/>
+<img src={"/build/20241113_convolution/images/4_build_script_initial.png"}/>
 <div>
 <div>{ r#"Which allows us to do this: "# }</div>
 </div><video autoplay=true width=500 loop=true>
-<source src={"/build/convolution_20241113/images/5_initial_run.webm"} type="video/webm"/>
+<source src={"/build/20241113_convolution/images/5_initial_run.webm"} type="video/webm"/>
 </video><div>
 <div>{ r#"Great! Now let's warm up with some light convolution before starting the crazy stuff..."# }</div>
 <div>{ r#"For that I'm going to write a data structure to help out a little"# }</div>
 </div>
-<img src={"/build/convolution_20241113/images/6_int_vector.png"}/>
+<img src={"/build/20241113_convolution/images/6_int_vector.png"}/>
 <div>
 <div>{ r#"Admitedly, the naming of this thing is not great, but refactoring is a beautiful thing that I expect to do a lot of later."# }</div>
 <div>{ r#"For now, we can just start implementing this."# }</div>
@@ -96,7 +96,7 @@ void Vector_i_free(Vector_i* v) {
 <div>{ r#"We can also write a test for it"# }</div>
 <div>{ r#"{{ link/[Thanks to Kay Lack for the little test framework|https://www.youtube.com/watch?v=5aZiRjgSGQU] }}"# }</div>
 </div>
-<img src={"/build/convolution_20241113/images/8_tests_initial.png"}/>
+<img src={"/build/20241113_convolution/images/8_tests_initial.png"}/>
 <div>
 <div>{ r#"(ignore all that `Vector_f` stuff, that's for later and I forgot to remove it for the screenshot...)"# }</div>
 <div>{ r#"Now for the `Vector_i_convolve` function..."# }</div>
@@ -218,7 +218,7 @@ int main() {
 "# }}</code></pre>
 <div>{ r#"And with `DEBUG = 0`, when we `./build.sh && ./build/main`"# }</div>
 </div>
-<img src={"/build/convolution_20241113/images/7_vector_out_initial.png"}/>
+<img src={"/build/20241113_convolution/images/7_vector_out_initial.png"}/>
 <div>
 <div>{ r#"Great! Thats probably right... "# }</div>
 <div>{ r#"Lets start in the convolve.h file by defining our interface:"# }</div>
@@ -340,10 +340,10 @@ Matrix_i* Matrix_i_convolve(Matrix_i* a, Matrix_i* b) {
 <div>{ r#"Here, we are calculating the index into a by adding the current index of a and b & subtracting half of the corresponding dimension of b."# }</div>
 <div>{ r#"Now we can see if this thing is working..."# }</div>
 </div>
-<img src={"/build/convolution_20241113/images/9_matrix_convolution_initial.ong"}/>
+<img src={"/build/20241113_convolution/images/9_matrix_convolution_initial.ong"}/>
 <div>
 </div><video autoplay=true width=500 loop=true>
-<source src={"/build/convolution_20241113/images/10_matrix_output_initial.webm"} type="video/webm"/>
+<source src={"/build/20241113_convolution/images/10_matrix_output_initial.webm"} type="video/webm"/>
 </video><div>
 <div>{ r#"This doesn't really do anything for us though, what is the application for a discreet finite convolution of two integer matrices?"# }</div>
 <div>{ r#"I'm sure someone smarter than me could find a use... but I'm not smarter than me yet"# }</div>
@@ -468,32 +468,32 @@ void save_img_as_ppm(Matrix_u32* img, const char *file_path) {
 <div>{ r#"Then we apply our blur to the matrix, generating a new image data matrix, and call the same function on it to save it as a PPM image file."# }</div>
 <div>{ r#"And just like that, we have our original.ppm:"# }</div>
 </div>
-<img src={"/build/convolution_20241113/images/11_original.png"}/>
+<img src={"/build/20241113_convolution/images/11_original.png"}/>
 <div>
 <div>{ r#"And our blurred.ppm image:"# }</div>
 </div>
-<img src={"/build/convolution_20241113/images/12_blurred.png"}/>
+<img src={"/build/20241113_convolution/images/12_blurred.png"}/>
 <div>
 <div>{ r#""# }</div>
 <div>{ r#""# }</div>
-</div></span>});	post_map.insert(String::from("image_resizing_20241106"), html! {<span markdown="block" style="white-space: pre-wrap"><div markdown="span">
+</div></span>});	post_map.insert(String::from("20241106_image_resizing"), html! {<span markdown="block" style="white-space: pre-wrap"><div markdown="span">
 <h1>{ r#"Image resizing blog"# }</h1>
 <div>{ r#""# }</div>
 <div>{ r#"Start by creating cargo project"# }</div>
 </div>
-<img src={"/build/image_resizing_20241106/images/1_aw_nutz.png"}/>
+<img src={"/build/20241106_image_resizing/images/1_aw_nutz.png"}/>
 <div>
 <div>{ r#""# }</div>
 <div>{ r#"copy shell.nix from another project & start the shell"# }</div>
 <div>{ r#""# }</div>
 <div>{ r#"where is my fish?"# }</div>
 </div>
-<img src={"/build/image_resizing_20241106/images/2_where_my_fish.png"}/>
+<img src={"/build/20241106_image_resizing/images/2_where_my_fish.png"}/>
 <div>
 <div>{ r#""# }</div>
 <div>{ r#"exit that shell"# }</div>
 </div><video autoplay=true width=500 loop=true>
-<source src={"/build/image_resizing_20241106/images/3_exit_dirty_bash.webm"} type="video/webm"/>
+<source src={"/build/20241106_image_resizing/images/3_exit_dirty_bash.webm"} type="video/webm"/>
 </video><div>
 <div>{ r#""# }</div>
 <div>{ r#"look up youtube video"# }</div>
@@ -556,11 +556,11 @@ async fn resize(task: Query<Task>) -> (StatusCode, Bytes) {
 "# }}</code></pre>
 <div>{ r#"when we run it, we get this in the logs: "# }</div>
 </div>
-<img src={"/build/image_resizing_20241106/images/4_create_project.png"}/>
+<img src={"/build/20241106_image_resizing/images/4_create_project.png"}/>
 <div>
 <div>{ r#"and we get this back when we send a request:"# }</div>
 </div>
-<img src={"/build/image_resizing_20241106/images/5_first_response.png"}/>
+<img src={"/build/20241106_image_resizing/images/5_first_response.png"}/>
 <div>
 <div>{ r#""# }</div>
 <div>{ r#"Now, we'll write a module that fetches images for us and returns them in a DynamicImage"# }</div>
@@ -569,7 +569,7 @@ async fn resize(task: Query<Task>) -> (StatusCode, Bytes) {
 <div>{ r#"We'll also introduce an error module to make using the `?` easier."# }</div>
 <div>{ r#"And just like that our structure looks like this:"# }</div>
 </div>
-<img src={"/build/image_resizing_20241106/images/6_new_file_structure.png"}/>
+<img src={"/build/20241106_image_resizing/images/6_new_file_structure.png"}/>
 <div>
 <div>{ r#"And our `src/error.rs` looks like this:"# }</div>
 <pre><code>{{ r#"
@@ -739,17 +739,17 @@ curl \
 "# }}</code></pre>
 <div>{ r#"and then we can `cargo r` and `./test_curl` to see if it works"# }</div>
 </div>
-<img src={"/build/image_resizing_20241106/images/7_test_curl_logs.png"}/>
+<img src={"/build/20241106_image_resizing/images/7_test_curl_logs.png"}/>
 <div>
 </div>
-<img src={"/build/image_resizing_20241106/images/8_test_curl_output.png"}/>
+<img src={"/build/20241106_image_resizing/images/8_test_curl_output.png"}/>
 <div>
 <div>{ r#"Great!"# }</div>
 <div>{ r#"Now to actually resize the image..."# }</div>
 <div>{ r#"This functionality should definitely be put into another module - we're no longer dealing with http requests."# }</div>
 <div>{ r#"So we create a new module img which will contain all of our image parsing and manipulation stuff"# }</div>
 </div>
-<img src={"/build/image_resizing_20241106/images/9_new_img_module.png"}/>
+<img src={"/build/20241106_image_resizing/images/9_new_img_module.png"}/>
 <div>
 <div>{ r#"And insize `img/resizer.rs` we can add something like this to get it resizing images..."# }</div>
 <pre><code>{{ r#"
@@ -814,7 +814,7 @@ async fn resize(Query(task): Query<Task>) -> impl IntoResponse {
 <div>{ r#"And now we can update our `test_curl` script to include a `width` and `height` parameters"# }</div>
 <div>{ r#"And just like that we have a slightly wider peppermint butler"# }</div>
 </div>
-<img src={"/build/image_resizing_20241106/images/10_wide_pep_but.png"}/>
+<img src={"/build/20241106_image_resizing/images/10_wide_pep_but.png"}/>
 <div>
 <div>{ r#""# }</div>
 </div></span>});
