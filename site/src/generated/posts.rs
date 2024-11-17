@@ -98,8 +98,8 @@ void Vector_i_free(Vector_i* v) {
 </div>
 <img src={"/build/20241113_convolution/images/8_tests_initial.png"}/>
 <div>
-<div>{ r#"(ignore all that `Vector_f` stuff, that's for later and I forgot to remove it for the screenshot...)"# }</div>
-<div>{ r#"Now for the `Vector_i_convolve` function..."# }</div>
+<div>{ r#"(ignore all that "# }<code>{ r#"Vector_f"# }</code>{ r#" stuff, that's for later and I forgot to remove it for the screenshot...)"# }</div>
+<div>{ r#"Now for the "# }<code>{ r#"Vector_i_convolve"# }</code>{ r#" function..."# }</div>
 <div>{ r#"I'll want to take in two vectors to perform the convolution over eachother, so we'll call them a and b"# }</div>
 <div>{ r#"And basically what we'll be doing is something like this:"# }</div>
 <pre><code>{{ r#"
@@ -182,7 +182,7 @@ Vector_i* Vector_i_convolve(Vector_i* a, Vector_i* b) {
 }
 "# }}</code></pre>
 <div>{ r#"and then we can try it out in our main:"# }</div>
-<div>{ r#"(Note that I have DEBUG in a `#define` statement above main to turn the printing on/off"# }</div>
+<div>{ r#"(Note that I have DEBUG in a "# }<code>{ r#"#define"# }</code>{ r#" statement above main to turn the printing on/off"# }</div>
 <pre><code>{{ r#"
 int main() {
     Vector_i* base = Vector_i_new();
@@ -216,7 +216,7 @@ int main() {
     return 0;
 }
 "# }}</code></pre>
-<div>{ r#"And with `DEBUG = 0`, when we `./build.sh && ./build/main`"# }</div>
+<div>{ r#"And with "# }<code>{ r#"DEBUG = 0"# }</code>{ r#", when we "# }<code>{ r#"./build.sh && ./build/main"# }</code>{ r#""# }</div>
 </div>
 <img src={"/build/20241113_convolution/images/7_vector_out_initial.png"}/>
 <div>
@@ -245,7 +245,7 @@ void Matrix_i_free(Matrix_i* m);
 
 Matrix_i* Matrix_i_convolve(Matrix_i* a, Matrix_i* b);
 "# }}</code></pre>
-<div>{ r#"Now we can implement our functions, pretty much the same way we did for our `Vector_i`, which I will skip for brevity"# }</div>
+<div>{ r#"Now we can implement our functions, pretty much the same way we did for our "# }<code>{ r#"Vector_i"# }</code>{ r#", which I will skip for brevity"# }</div>
 <div>{ r#"So once we have all our helper functions we can start convolving matrices."# }</div>
 <div>{ r#"This is going to be a lot simpler than the vector convolution because for the vector we did a biblically accurate convolution - where it is mathematically correct."# }</div>
 <div>{ r#"For the matrix, we are essentially going to do the dumbed-down computer science version & just take a moving weighted sum of each element."# }</div>
@@ -283,7 +283,7 @@ Matrix_i* Matrix_i_convolve(Matrix_i* a, Matrix_i* b);
         |         |
         |_________|
 "# }}</code></pre>
-<div>{ r#"In the case above b and a have the same width, but regardless of relative widths, we will have done `Matrix_i_cols(a)` operations and therefore have generated as many outputs."# }</div>
+<div>{ r#"In the case above b and a have the same width, but regardless of relative widths, we will have done "# }<code>{ r#"Matrix_i_cols(a)"# }</code>{ r#" operations and therefore have generated as many outputs."# }</div>
 <div>{ r#"Then, we continue until just a single element of each is overlapping, like this"# }</div>
 <pre><code>{{ r#"
                  _________
@@ -297,12 +297,12 @@ Matrix_i* Matrix_i_convolve(Matrix_i* a, Matrix_i* b);
         |         |
         |_________|
 "# }}</code></pre>
-<div>{ r#"So we've now done an additional `Matrix_i_cols(b) - 1` operations, and thus have generated as many outputs"# }</div>
-<div>{ r#"Which puts us at `Matrix_i_cols(a) + Matrix_i_cols(b) - 1` "# }</div>
+<div>{ r#"So we've now done an additional "# }<code>{ r#"Matrix_i_cols(b) - 1"# }</code>{ r#" operations, and thus have generated as many outputs"# }</div>
+<div>{ r#"Which puts us at "# }<code>{ r#"Matrix_i_cols(a) + Matrix_i_cols(b) - 1"# }</code>{ r#" "# }</div>
 <div>{ r#"Flipping the whole thing on it's side we can see that the same holds true for the height"# }</div>
 <div>{ r#"And so the biblically accurate output matrix has the following dimensions:"# }</div>
-<div>{ r#"width: `Matrix_i_cols(a) + Matrix_i_cols(b) - 1`"# }</div>
-<div>{ r#"height: `Matrix_i_rows(a) + Matrix_i_rows(b) - 1`"# }</div>
+<div>{ r#"width: "# }<code>{ r#"Matrix_i_cols(a) + Matrix_i_cols(b) - 1"# }</code>{ r#""# }</div>
+<div>{ r#"height: "# }<code>{ r#"Matrix_i_rows(a) + Matrix_i_rows(b) - 1"# }</code>{ r#""# }</div>
 <div>{ r#"Anyway, now lets write the blasphemers version"# }</div>
 <div>{ r#"For each element in a, we apply b as if its center is at the current element of a."# }</div>
 <div>{ r#"Applying b involves pairing each element with an element from a by its relative position."# }</div>
@@ -348,7 +348,7 @@ Matrix_i* Matrix_i_convolve(Matrix_i* a, Matrix_i* b) {
 <div>{ r#"This doesn't really do anything for us though, what is the application for a discreet finite convolution of two integer matrices?"# }</div>
 <div>{ r#"I'm sure someone smarter than me could find a use... but I'm not smarter than me yet"# }</div>
 <div>{ r#"But what we can do is create new matrix types for unsigned 32-bit integers & floats, then convolve the floats over the ints"# }</div>
-<div>{ r#"We can then encode image data in the `uint32_t` matrix and applying the convolution will change the image"# }</div>
+<div>{ r#"We can then encode image data in the "# }<code>{ r#"uint32_t"# }</code>{ r#" matrix and applying the convolution will change the image"# }</div>
 <div>{ r#"So lets write that function:"# }</div>
 <pre><code>{{ r#"
 // cross-type convolution
@@ -404,7 +404,7 @@ int main() {
 "# }}</code></pre>
 <div>{ r#"The first thing we do above is create a 400x400 matrix to represent out image."# }</div>
 <div>{ r#"Then, we create a 4x4 mask that will be the box which we move over our image to blur it."# }</div>
-<div>{ r#"Then we fill the image with either black or white pixels by passing its pointer to the `tv_static` function, which looks like this:"# }</div>
+<div>{ r#"Then we fill the image with either black or white pixels by passing its pointer to the "# }<code>{ r#"tv_static"# }</code>{ r#" function, which looks like this:"# }</div>
 <pre><code>{{ r#"
 void tv_static(Matrix_u32* img) {
     size_t w = Matrix_u32_cols(img);
@@ -433,7 +433,7 @@ void flat_blur_matrix(Matrix_f* msk) {
     }
 }
 "# }}</code></pre>
-<div>{ r#"Then, I use this `save_image_as_ppm` to output the data into an image file with the given name, PPM being the choice of format because it's header is extremely simple:"# }</div>
+<div>{ r#"Then, I use this "# }<code>{ r#"save_image_as_ppm"# }</code>{ r#" to output the data into an image file with the given name, PPM being the choice of format because it's header is extremely simple:"# }</div>
 <pre><code>{{ r#"
 P6
 WIDTH HEIGHT 255
@@ -566,12 +566,12 @@ async fn resize(task: Query<Task>) -> (StatusCode, Bytes) {
 <div>{ r#"Now, we'll write a module that fetches images for us and returns them in a DynamicImage"# }</div>
 <div>{ r#"First, we'll restructure what we have & create files for our image fetching module"# }</div>
 <div>{ r#"It'll live with all of our http-client-like things, so we'll name the module http"# }</div>
-<div>{ r#"We'll also introduce an error module to make using the `?` easier."# }</div>
+<div>{ r#"We'll also introduce an error module to make using the "# }<code>{ r#"?"# }</code>{ r#" easier."# }</div>
 <div>{ r#"And just like that our structure looks like this:"# }</div>
 </div>
 <img src={"/build/20241106_image_resizing/images/6_new_file_structure.png"}/>
 <div>
-<div>{ r#"And our `src/error.rs` looks like this:"# }</div>
+<div>{ r#"And our "# }<code>{ r#"src/error.rs"# }</code>{ r#" looks like this:"# }</div>
 <pre><code>{{ r#"
 // errors for the service
 
@@ -583,11 +583,11 @@ pub enum Error {
 }
 
 "# }}</code></pre>
-<div>{ r#"Note that we also added the `derive_more` crate. (`cargo add derive_more --features full`)"# }</div>
+<div>{ r#"Note that we also added the "# }<code>{ r#"derive_more"# }</code>{ r#" crate. ("# }<code>{ r#"cargo add derive_more --features full"# }</code>{ r#")"# }</div>
 <div>{ r#"This will come into play later when converting from external errors to our service errors."# }</div>
 <div>{ r#""# }</div>
-<div>{ r#"Now, we'll start converting all of our `unwrap()`s into `?` operators."# }</div>
-<div>{ r#"Starting in lib.rs, we make `run` return a `Result<()>` and..."# }</div>
+<div>{ r#"Now, we'll start converting all of our "# }<code>{ r#"unwrap()"# }</code>{ r#"s into "# }<code>{ r#"?"# }</code>{ r#" operators."# }</div>
+<div>{ r#"Starting in lib.rs, we make "# }<code>{ r#"run"# }</code>{ r#" return a "# }<code>{ r#"Result<()>"# }</code>{ r#" and..."# }</div>
 <pre><code>{{ r#"
 error[E0277]: `?` couldn't convert the error to `error::Error`
   --> src/lib.rs:50:37
@@ -599,8 +599,8 @@ error[E0277]: `?` couldn't convert the error to `error::Error`
    = help: the trait `FromResidual<std::result::Result<Infallible, E>>` is implemented for `std::result::Result<T, F>`
    = note: required for `std::result::Result<(), error::Error>` to implement `FromResidual<std::result::Result<Infallible, std::io::Error>>`
 "# }}</code></pre>
-<div>{ r#"now it yells at us to make our error implement `From` for `std::io::Error`."# }</div>
-<div>{ r#"This should be easy with `derive_more`."# }</div>
+<div>{ r#"now it yells at us to make our error implement "# }<code>{ r#"From"# }</code>{ r#" for "# }<code>{ r#"std::io::Error"# }</code>{ r#"."# }</div>
+<div>{ r#"This should be easy with "# }<code>{ r#"derive_more"# }</code>{ r#"."# }</div>
 <pre><code>{{ r#"
 #[derive(From, Debug)]
 pub enum Error {
@@ -626,12 +626,12 @@ pub enum Error {
 <div>{ r#"    - Sometimes you have to get fancy and confusing to discover simplicity"# }</div>
 <div>{ r#"    - Gives me an opportunity to find out which is faster later"# }</div>
 <div>{ r#"So, I'll be creating two different implementations of our image fetching function"# }</div>
-<div>{ r#"`serial_fetch`"# }</div>
-<div>{ r#"`parallel_fetch`"# }</div>
+<div>{ r#""# }<code>{ r#"serial_fetch"# }</code>{ r#""# }</div>
+<div>{ r#""# }<code>{ r#"parallel_fetch"# }</code>{ r#""# }</div>
 <div>{ r#"Lets get into it..."# }</div>
 <div>{ r#""# }</div>
 <div>{ r#"In order to write a simple http client we'll use hyper, since axum already uses it"# }</div>
-<div>{ r#"And I'll be starting from this example: `https://hyper.rs/guides/1/client/basic/`"# }</div>
+<div>{ r#"And I'll be starting from this example: "# }<code>{ r#"https://hyper.rs/guides/1/client/basic/"# }</code>{ r#""# }</div>
 <div>{ r#"Making a single request to begin with, we have something like this:"# }</div>
 <pre><code>{{ r#"
 #[tracing::instrument]
@@ -728,7 +728,7 @@ async fn resize(task: Query<Task>) -> impl IntoResponse {
     }
 }
 "# }}</code></pre>
-<div>{ r#"For convenience, we write a little test script `test_curl`:"# }</div>
+<div>{ r#"For convenience, we write a little test script "# }<code>{ r#"test_curl"# }</code>{ r#":"# }</div>
 <pre><code>{{ r#"
 #! /bin/sh
 
@@ -737,7 +737,7 @@ curl \
     --verbose \
     --output out.png
 "# }}</code></pre>
-<div>{ r#"and then we can `cargo r` and `./test_curl` to see if it works"# }</div>
+<div>{ r#"and then we can "# }<code>{ r#"cargo r"# }</code>{ r#" and "# }<code>{ r#"./test_curl"# }</code>{ r#" to see if it works"# }</div>
 </div>
 <img src={"/build/20241106_image_resizing/images/7_test_curl_logs.png"}/>
 <div>
@@ -751,7 +751,7 @@ curl \
 </div>
 <img src={"/build/20241106_image_resizing/images/9_new_img_module.png"}/>
 <div>
-<div>{ r#"And insize `img/resizer.rs` we can add something like this to get it resizing images..."# }</div>
+<div>{ r#"And insize "# }<code>{ r#"img/resizer.rs"# }</code>{ r#" we can add something like this to get it resizing images..."# }</div>
 <pre><code>{{ r#"
 // image manipulation functionality
 
@@ -761,7 +761,7 @@ pub async fn resize(image: &mut DynamicImage, width: u32, height: u32) -> Dynami
     image.resize_exact(width, height, image::imageops::FilterType::Lanczos3)
 }
 "# }}</code></pre>
-<div>{ r#"And then update our `resize` handler in lib.rs to call to a function that uses our new `resizer::resize` function:"# }</div>
+<div>{ r#"And then update our "# }<code>{ r#"resize"# }</code>{ r#" handler in lib.rs to call to a function that uses our new "# }<code>{ r#"resizer::resize"# }</code>{ r#" function:"# }</div>
 <pre><code>{{ r#"
 async fn handle_resize(task: Task) -> Result<Vec<u8>> {
     match image_fetcher::serial_fetch(task.url.clone()).await {
@@ -811,7 +811,7 @@ async fn resize(Query(task): Query<Task>) -> impl IntoResponse {
     }
 }
 "# }}</code></pre>
-<div>{ r#"And now we can update our `test_curl` script to include a `width` and `height` parameters"# }</div>
+<div>{ r#"And now we can update our "# }<code>{ r#"test_curl"# }</code>{ r#" script to include a "# }<code>{ r#"width"# }</code>{ r#" and "# }<code>{ r#"height"# }</code>{ r#" parameters"# }</div>
 <div>{ r#"And just like that we have a slightly wider peppermint butler"# }</div>
 </div>
 <img src={"/build/20241106_image_resizing/images/10_wide_pep_but.png"}/>

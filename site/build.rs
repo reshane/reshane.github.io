@@ -92,6 +92,15 @@ fn main() {
             }
             else {
                 if !code_block {
+                    let mut start = true;
+                    while let Some(idx) = line.find("`") {
+                        if start {
+                            line.replace_range(idx..idx+1, "\"# }<code>{ r#\"");
+                        } else {
+                            line.replace_range(idx..idx+1, "\"# }</code>{ r#\"");
+                        }
+                        start = !start;
+                    }
                     if line.starts_with("#") {
                         line = format!("<h1>{{ r#\"{}\"# }}</h1>", &line[2..]);
                     } else {
