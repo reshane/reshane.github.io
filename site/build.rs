@@ -117,7 +117,7 @@ fn main() {
                         let link = &input_string[link_s+1..link_e];
                         let link_string = &input_string[link_b+1..link_s];
             
-                        let link_ref_string = format!("\"# }}</div><a href={{ \"{link}\" }}>{{ \"{link_string}\" }}\n</a><div>{{ r#\"");
+                        let link_ref_string = format!("\"# }}<a href={{ \"{link}\" }}>{{ \"{link_string}\" }}\n</a>{{ r#\"");
             
                         line.replace_range(s_idx..e_idx + 3, &link_ref_string);
                     }
