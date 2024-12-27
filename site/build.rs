@@ -109,7 +109,7 @@ fn main() {
                         </a><div>"# }</div>
                         */
                         let input_string = &line[s_idx..e_idx + 3];
-                        let link_b = input_string.find("/").expect("Links must be / prefixed"); 
+                        let _link_b = input_string.find("/").expect("Links must be / prefixed"); 
                         let link_b = input_string.find("[").expect("Links must be wrapped in []");
                         let link_s = input_string.find("|").expect("Link strings and sources must be | delimited");
                         let link_e = input_string.find("]").expect("Links must be wrapped in []");
@@ -121,7 +121,11 @@ fn main() {
             
                         line.replace_range(s_idx..e_idx + 3, &link_ref_string);
                     }
-                    if line.starts_with("#") {
+                    if line.starts_with("###") {
+                        line = format!("<h3>{{ r#\"{}\"# }}</h3>", &line[4..]);
+                    } else if line.starts_with("##") {
+                        line = format!("<h2>{{ r#\"{}\"# }}</h2>", &line[3..]);
+                    } else if line.starts_with("#") {
                         line = format!("<h1>{{ r#\"{}\"# }}</h1>", &line[2..]);
                     } else {
                         line = format!("<div>{{ r#\"{}\"# }}</div>", line);
