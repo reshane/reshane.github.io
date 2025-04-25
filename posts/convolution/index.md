@@ -3,27 +3,27 @@
 I want to do some convolution stuff in c because it seems fun.
 So I start by making a project and taking some screenshots for this blog I guess.
 
-![File Structure](./convolution/images/0_file_structure.png)
-![Initial main.c](./convolution/images/1_initial_main_c.png)
-![Initial convolve.h](./convolution/images/2_initial_convolve_h.png)
-![Initial convolve.c](./convolution/images/3_initial_convolve_c.png)
+![File Structure](./images/0_file_structure.png)
+![Initial main.c](./images/1_initial_main_c.png)
+![Initial convolve.h](./images/2_initial_convolve_h.png)
+![Initial convolve.c](./images/3_initial_convolve_c.png)
 
 Now to figure out how to build all of it...
 [To stack overflow!](https://stackoverflow.com/questions/1705961/how-to-link-to-a-static-library-in-c)
 And we end up with this:
 
-![Initial build script](./convolution/images/4_build_script_initial.png)
+![Initial build script](./images/4_build_script_initial.png)
 
 Which allows us to do this: 
 
 <video width="320" height="240" controls>
-  <source src="./convolution/images/5_initial_run.webm" type="video/webm">
+  <source src="./images/5_initial_run.webm" type="video/webm">
 </video>
 
 Great! Now let's warm up with some light convolution before starting the crazy stuff...
 For that I'm going to write a data structure to help out a little
 
-![int vector](./convolution/images/6_int_vector.png)
+![int vector](./images/6_int_vector.png)
 
 Admitedly, the naming of this thing is not great, but refactoring is a beautiful thing that I expect to do a lot of later.
 For now, we can just start implementing this.
@@ -88,7 +88,7 @@ And best practices and all that stuff of course.
 We can also write a test for it
 Thanks to Kay Lack for the [little test framework](https://www.youtube.com/watch?v=5aZiRjgSGQU)
 
-![Initial tests](./convolution/images/8_tests_initial.png)
+![Initial tests](./images/8_tests_initial.png)
 
 (ignore all that `Vector_f` stuff, that's for later and I forgot to remove it for the screenshot...)
 Now for the `Vector_i_convolve` function...
@@ -218,7 +218,7 @@ int main() {
 
 And with `DEBUG = 0`, when we `./build.sh && ./build/main`
 
-![Initial vector out](./convolution/images/7_vector_out_initial.png)
+![Initial vector out](./images/7_vector_out_initial.png)
 
 Great! Thats probably right... 
 Lets start in the convolve.h file by defining our interface:
@@ -350,10 +350,10 @@ Matrix_i* Matrix_i_convolve(Matrix_i* a, Matrix_i* b) {
 Here, we are calculating the index into a by adding the current index of a and b & subtracting half of the corresponding dimension of b.
 Now we can see if this thing is working...
 
-![Initial matrix convolution](./convolution/images/9_matrix_convolution_initial.png)
+![Initial matrix convolution](./images/9_matrix_convolution_initial.png)
 
 <video width="320" height="240" controls>
-  <source src="./convolution/images/10_matrix_output_initial.webm" type="video/webm">
+  <source src="./images/10_matrix_output_initial.webm" type="video/webm">
 </video>
 
 This doesn't really do anything for us though, what is the application for a discreet finite convolution of two integer matrices?
@@ -487,9 +487,9 @@ void save_img_as_ppm(Matrix_u32* img, const char *file_path) {
 Then we apply our blur to the matrix, generating a new image data matrix, and call the same function on it to save it as a PPM image file.
 And just like that, we have our original.ppm:
 
-![Original image](./convolution/images/11_original.png)
+![Original image](./images/11_original.png)
 
 And our blurred.ppm image:
 
-![Blurred image](./convolution/images/12_blurred.png)
+![Blurred image](./images/12_blurred.png)
 
