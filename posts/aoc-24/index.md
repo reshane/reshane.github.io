@@ -80,7 +80,7 @@ Day 23 was fun because it is not often I get to use algorithms I learned in coll
 
 My lower moments are pretty obvious given my personal times:
 
-![Lows](./aoc-24/images/0_my_times.png)
+![Lows](./images/0_my_times.png)
 
 Day 14 was tough because it took me a long time to realize that having every robot in a unique position would give the correct configuration, in fact I didn't realize this and it was a hint that I got from reddit.
 In the end I was able to solve about 9 minutes after midnight which was disapointing.
