@@ -1,21 +1,27 @@
 # Image resizing blog
 
 Start by creating cargo project
-{{ images/1_* }}
+
+![Oops](./images/1_aw_nutz.png)
 
 copy shell.nix from another project & start the shell
 
 where is my fish?
-{{ images/2_* }}
+
+![Where is my fish](./images/2_where_my_fish.png)
 
 exit that shell
-{{ videos/3_* }}
 
-look up youtube video
- - https://www.youtube.com/watch?v=tv9s4jhdUpU
+<video width="320" height="240" controls>
+  <source src="./images/3_exit_dirty_bash.webm" type="video/webm">
+</video>
+
+look up [youtube video](https://www.youtube.com/watch?v=tv9s4jhdUpU)
 
 come back in a few days and start writing the resizer again
+
 So far, this is what we have in main.rs:
+
 ```
 use axum::{
     routing::get,
@@ -69,18 +75,29 @@ async fn resize(task: Query<Task>) -> (StatusCode, Bytes) {
     (StatusCode::OK, task.url.as_bytes().to_vec().into())
 }
 ```
+
 when we run it, we get this in the logs: 
-{{ images/4_* }}
+
+![Create project](./images/4_initial_logs.png)
+
 and we get this back when we send a request:
-{{ images/5_* }}
+
+![Add image crate](./images/5_first_response.png)
 
 Now, we'll write a module that fetches images for us and returns them in a DynamicImage
+
 First, we'll restructure what we have & create files for our image fetching module
+
 It'll live with all of our http-client-like things, so we'll name the module http
+
 We'll also introduce an error module to make using the `?` easier.
+
 And just like that our structure looks like this:
-{{ images/6_* }}
+
+![File structure](./images/6_new_file_structure.png)
+
 And our `src/error.rs` looks like this:
+
 ```
 // errors for the service
 
@@ -88,15 +105,18 @@ use derive_more::From;
 
 pub type Result<T> = core::result::Result<T, Error>;
 
-pub enum Error {
-}
+pub enum Error {}
 
 ```
+
 Note that we also added the `derive_more` crate. (`cargo add derive_more --features full`)
+
 This will come into play later when converting from external errors to our service errors.
 
 Now, we'll start converting all of our `unwrap()`s into `?` operators.
+
 Starting in lib.rs, we make `run` return a `Result<()>` and...
+
 ```
 error[E0277]: `?` couldn't convert the error to `error::Error`
   --> src/lib.rs:50:37
@@ -108,8 +128,10 @@ error[E0277]: `?` couldn't convert the error to `error::Error`
    = help: the trait `FromResidual<std::result::Result<Infallible, E>>` is implemented for `std::result::Result<T, F>`
    = note: required for `std::result::Result<(), error::Error>` to implement `FromResidual<std::result::Result<Infallible, std::io::Error>>`
 ```
+
 now it yells at us to make our error implement `From` for `std::io::Error`.
 This should be easy with `derive_more`.
+
 ```
 #[derive(From, Debug)]
 pub enum Error {
@@ -120,28 +142,41 @@ pub enum Error {
     ServerBinding(std::io::Error),
 }
 ```
+
 And no more errors! We'll need to add more to this enum while implementing our image fetcher...
+
 So we'll do that now
+
 We want to be caching as much as possible in order to speed this thing up because image processing pretty slow.
+
 In order to fetch images faster, we should actually send two requests - 
     1. Grab the data from the provided image url
     2. Grab the data from a local image store if possible
+
 Typically this would be done in order, but we can use tokio to just fire off two requests and take whichever comes back successfully first.
+
 I'm not certain this is actually a performance improvement for these reasons:
     - Requesting a local image that doesn't exist will 404 very quickly anyway
     - Always sending off two requests rather than sometimes only sending off one could be detrimental under heavy load
+
 I'm going to do it anyway for these reasons:
     - Learning experience
     - Sometimes you have to get fancy and confusing to discover simplicity
     - Gives me an opportunity to find out which is faster later
+
 So, I'll be creating two different implementations of our image fetching function
+
 `serial_fetch`
 `parallel_fetch`
+
 Lets get into it...
 
 In order to write a simple http client we'll use hyper, since axum already uses it
+
 And I'll be starting from this example: `https://hyper.rs/guides/1/client/basic/`
+
 Making a single request to begin with, we have something like this:
+
 ```
 #[tracing::instrument]
 pub async fn serial_fetch(url: String) -> Result<DynamicImage> {
@@ -199,12 +234,14 @@ pub async fn serial_fetch(url: String) -> Result<DynamicImage> {
 
 }
 ```
+
 Some TODO's for this thing:
     - abstract away the 'client' construct
     - parsing the bytes into an image should be separate
         - this is going to get more complicated with more formats
 
 For now, we can start using this thing by updating our handler in lib.rs like this:
+
 ```
 async fn resize(task: Query<Task>) -> impl IntoResponse {
     // we need to fetch the image here
@@ -237,7 +274,9 @@ async fn resize(task: Query<Task>) -> impl IntoResponse {
     }
 }
 ```
+
 For convenience, we write a little test script `test_curl`:
+
 ```
 #! /bin/sh
 
@@ -246,15 +285,24 @@ curl \
     --verbose \
     --output out.png
 ```
+
 and then we can `cargo r` and `./test_curl` to see if it works
-{{ images/7_* }}
-{{ images/8_* }}
+
+![Test curl logs](./images/7_test_curl_logs.png)
+![Test curl output](./images/8_test_curl_output.png)
+
 Great!
+
 Now to actually resize the image...
+
 This functionality should definitely be put into another module - we're no longer dealing with http requests.
+
 So we create a new module img which will contain all of our image parsing and manipulation stuff
-{{ images/9_* }}
+
+![New image model](./images/9_new_img_model.png)
+
 And insize `img/resizer.rs` we can add something like this to get it resizing images...
+
 ```
 // image manipulation functionality
 
@@ -264,7 +312,9 @@ pub async fn resize(image: &mut DynamicImage, width: u32, height: u32) -> Dynami
     image.resize_exact(width, height, image::imageops::FilterType::Lanczos3)
 }
 ```
+
 And then update our `resize` handler in lib.rs to call to a function that uses our new `resizer::resize` function:
+
 ```
 async fn handle_resize(task: Task) -> Result<Vec<u8>> {
     match image_fetcher::serial_fetch(task.url.clone()).await {
@@ -314,6 +364,9 @@ async fn resize(Query(task): Query<Task>) -> impl IntoResponse {
     }
 }
 ```
+
 And now we can update our `test_curl` script to include a `width` and `height` parameters
+
 And just like that we have a slightly wider peppermint butler
-{{ images/10_* }}
+
+![Wide pep butt](./images/10_wide_pep_but.png)
