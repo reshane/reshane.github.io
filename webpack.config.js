@@ -4,7 +4,11 @@ const webpack = require('webpack');
 const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
-const POST_NAMES = ["aoc-24", "convolution", "image-resizing", "fourier-transforms"];
+const fs = require('fs');
+let raw = fs.readFileSync('./post_data.json');
+let json = JSON.parse(raw);
+
+const POST_NAMES = json.post_names;
 
 const getPlugins = () => {
     plugins = [
