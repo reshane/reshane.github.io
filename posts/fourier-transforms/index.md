@@ -1,8 +1,11 @@
 # Fourier Transforms
 
 As I am someone who enjoys interesting algorithms, math, and re-implementing existing things, it was only a matter of time before I wrote a fourier transform.
-The first time I had the idea to do so was in college when I saw {{ link/[this 3b1b video|]https://www.youtube.com/watch?v=KuXjwB4LzSA] }} so thats where we'll start
+
+The first time I had the idea to do so was in college when I saw [this 3b1b video](https://www.youtube.com/watch?v=KuXjwB4LzSA) so thats where we'll start
+
 This time around I wanted to implement the algorithm within an stb-style header only library, so we'll start with some data structures to support our algorithm there...
+
 ```
 #ifndef FFT_H_
 #define FFT_H_
@@ -61,10 +64,15 @@ void fft_mat_free(fft_Matrix_cf* mat);
 float complex fft_mat_get(fft_Matrix_cf* mat, size_t x, size_t y);
 void fft_mat_set(fft_Matrix_cf* mat, size_t x, size_t y, float complex e);
 ```
+
 Along with all of our includes (some made optional by putting their functions behind macros which I thought was a cool way to provide configuration to users of the library),
+
 We define vector and matrix data structures along with some associated functions
+
 Also defined in our `[[ CONSTANTS ]]` section is an epsilon value, which will come in handy later for floating-point stuff...
+
 Now we can move on to the implementation of the boilerplate for our data structures
+
 ```
 #ifdef FFT_IMPLEMENTATION
 
@@ -138,8 +146,11 @@ void fft_mat_set(fft_Matrix_cf* mat, size_t x, size_t y, float complex e)
     mat->data[idx] = e;
 }
 ```
+
 Great! now we have data structures we can use to create some memory leaks
+
 or not that - let's implement a discrete fourier tranform using our vector to get a grip on what we're actually doing
+
 ```
 // [[ ALGORITHMS ]]
 
@@ -174,10 +185,15 @@ void dft_inverse(fft_Vec_cf* dft_series, fft_Vec_cf* series)
     }
 }
 ```
+
 Cool - now we have a pretty good idea what we're doing
+
 Basically calculating the center of mass of our function when wrapped around the origin for a given frequency, which maps to the index in our resulting vector
+
 And for computing the inverse, we go the opposite way by using omega^-1 - aka the root of unity that we are evaluating at to the -1 power.
+
 Now we can write some tests to make sure we did everything right
+
 ```
 TEST(test_dft)
 {
@@ -252,18 +268,28 @@ TEST(test_dft_inverse)
     fft_vec_free(&b);
 }
 ```
+
 Awesome - lets see if that works...
-{{ images/0_* }}
+
+![DFT test results](./images/0_dft_test_results.png)
+
 Now lets implement the the Fast Fourier Transform and see how much faster it is compared to the naive discrete approach..
-Looking at {{ link/[this wikipedia page|https://en.wikipedia.org/wiki/Butterfly_diagram] }} really clears up what I found to be the complicated part of implementing the algorithm
+
+Looking at [this wikipedia page](https://en.wikipedia.org/wiki/Butterfly_diagram) really clears up what I found to be the complicated part of implementing the algorithm
+
 Essentially what it is doing to recombine the recursively solved sub-problems is two expressions on each pair, which generate elements at their respective indices:
+
 ```
 y0 = x0 + x1*w
 y1 = x0 - x1*w
 ```
+
 where `x0` and `x1` are elements of the same index in the transformed sub problems, in this case `x0` comes from the even index sub-problem.
-`w` in the above is our omega value, which is essentially just a root of unity - there is a lot more that goes into why these {{ link/[twiddle factors|] }} do what they do, but the jist is that evaluating polynomials at inputs selected such that they cancel eachother out drastically reduces the number of operations that must be performed, and these specific complex numbers allow us to do that :-)
+
+`w` in the above is our omega value, which is essentially just a root of unity - there is a lot more that goes into why these twiddle factors do what they do, but the jist is that evaluating polynomials at inputs selected such that they cancel eachother out drastically reduces the number of operations that must be performed, and these specific complex numbers allow us to do that :-)
+
 With all that knowledge, we are ready to implement our recursive-cooley-tukey fast fourier transform...
+
 ```
 double complex fft_omega(size_t n, size_t k)
 {
@@ -315,11 +341,16 @@ void fft(fft_Vec_cf* series, fft_Vec_cf* dft_series)
     fft_vec_free(&odd_dft);
 }
 ```
+
 Pro tip: In debugging and fixing my implementation I found that it was easier to start with a pseudo-recursive implementation, where the recursive calls above to `fft` are first calls to what we know to be a working `dft`.
+
 Then we can write some more tests to see if this thing actually works: 
-{{ images/1_* }}
-{{ images/2_* }}
+
+![Test FFT & DFT](./images/1_test_fft_dft.png)
+![FFT & DFT Test output](./images/2_fft_dft_test_out.png)
+
 You might notice I am calling an fft_inverse function in the tests, this is pretty much the same exact algorithm, but but with a slight difference in the butterfly recombination:
+
 ```
 double complex w = cexp((2.f*I*M_PI*(int)k)/series_count);
 double complex x0 = fft_vec_get(&evn_dft, k);
@@ -328,32 +359,65 @@ double complex x1 = fft_vec_get(&odd_dft, k);
 double complex y0 = 0.5f*(x0 + x1*w);
 double complex y1 = 0.5f*(x0 - x1*w);
 ```
+
 Now we can explore the differences in speed of our two algorithms
+
 We can do so by splitting the test we wrote into two sections that we will turn on and off with a macro definition, and timing each one while increasing the input (shifting `n` until one runs too slow)
-{{ videos/3_* }}
+
+<video width="320" height="240" controls>
+  <source src="./images/3_dft_vs_fft.webm" type="video/webm">
+</video>
+
 The difference only gets more noticeable as n grows, but on only n = 4096, a difference of over two seconds to about 500 milliseconds is significant
+
 It is worth noting at this point that this implementation can be improved - for example by performing it in place rather than mking a recursive call at all
+
 Additionally, the original Cooley-Tukey algorithm, which is what we've implemented, is limited by the fact that it can only work on inputs that are a power of two in size
+
 This can also be improved by using what is called a mixed radix
+
 Above we split into two sub problems, but we could have also chosen to split into 3, 5, 7, 11 or some other number of groups. Importantly, this choice can be made on sub problems independent of other sub problems or parent problems, meaning it is possible to dynamically split the input based on its prime factorization.
+
 For the theoretical, general purpose uber algorithm, the keen eyed will observe that for increasingly large prime inputs, writing more radixes for the mixed radix solution is a losing battle - i.e. there will always be a larger prime input that the algorithm will not be able to handle. For this case, we have the dft - although very slow, it will solve the problem on prime inputs.
+
 How is this dealt with in the real world though? Well, I would choose an implementation based on domain. For example, if this is going to be used for image processing, it could accept images up to certain dimensions and then implement radixes for all primes up to that number - sounds like a lot of work, but primes get more sparse the higher you go, so how many could it really be?
+
 As an aside, we can find out...
+
 I haven't seen too many images larger than 3000x3000 - of course there are images that need to be much much larger than this, but for the sake of argument...
+
 we can write a program to find some primes like this...
-{{ images/4_* }}
+
+![Primes finder](./images/4_primes_finder.png)
+
 The temptation to start i at 0 or 1 is extremely strong, but it is important to remember that neither are prime - 1 only has one factor, and 0 has infinite factors, so although they are special little guys, this isn't about them
+
 We start at 2 and test whether our previously found primes divide evenly into our current potential prime - something we only have to do up until it is half of our test number (because past that point we are testing what would be factors that would be multiplied by factors we already tested to produce the result - thus a redundant test).
+
 Additionally, we can break out of the loop when we find a factor, since we only need one factor besides 1 and i to prove i is not prime
+
 And that is how we get our 27 lines of glorious prime finding action, now to run it...
-{{ videos/5_* }}
+
+<video width="320" height="240" controls>
+  <source src="./images/5_primes_run.webm" type="video/webm">
+</video>
+
 And Melissa wants me to do 10_000, so here we go...
-{{ videos/6_* }}
+
+<video width="320" height="240" controls>
+  <source src="./images/6_stinky_request_primes_run.png" type="video/webm">
+</video>
+
 So if we want to accept images up to 10_000x10_000, we have to implement 1_229 radixes... Not a super realistic solution, so how does one generate these implementations? There must be a pattern that can be exploited, but for now I'm going to move on to a 2 dimensional implementation without writing any other radixes (to keep things simple for myself).
-Looking at a bunch of different things, including {{ link/[this pdf|https://www.robots.ox.ac.uk/~az/lectures/ia/lect2.pdf] }} and {{ link/[this video|https://www.youtube.com/watch?v=v743U7gvLq0] }}
+
+Looking at a bunch of different things, including [this pdf](https://www.robots.ox.ac.uk/~az/lectures/ia/lect2.pdf) and [this video](https://www.youtube.com/watch?v=v743U7gvLq0)
+
 it seems that a fourier transform in two dimensions can be performed via transforming all the rows individually as if they were independent 1 dimensional transforms
+
 and then repeating the process on the columns formed by the transformed rows
+
 Before implementing this algorithm on the  Matrix data type, I'll first do a slow version where I translate the matrices to arrays of our vector type and just call our vector functions on the row and column vectors...
+
 ```
 void fft_matrix(fft_Matrix_cf* mat)
 {
@@ -416,9 +480,13 @@ void fft_matrix(fft_Matrix_cf* mat)
     }
 }
 ```
+
 And of course the inverse transform I'm doing the same thing but first the columns and calling fft_inverse on everything instead
+
 Now we can get into transforming some images!
+
 We'll do this with the help of the PPM format and some arrays of `uint32_t`'s:
+
 ```
 size_t img_rows = 512, img_cols = 512;
 uint32_t* img = (uint32_t*)malloc(img_rows*img_cols*sizeof(uint32_t));
@@ -450,7 +518,9 @@ void save_img_as_ppm(uint32_t* img, size_t rows, size_t cols, const char *file_p
     fclose(f);
 }
 ```
+
 Now the world is kind of our oyster in terms of generating interesting looking things, but to try and keep things understandable, I'm going to be trying to keep everythign grayscale & keeping our values from 0-256 with these functions:
+
 ```
 // multiply by 255 and put the vale in each channel
 uint32_t get_color(double complex f) {
@@ -471,7 +541,9 @@ double complex map_color(uint32_t color) {
     return (double complex)r/255.f; // 0-1
 }
 ```
+
 Now, we can set some pixels in our image, fourier transform it, inverse fourier transform it, and hope it comes out the other end the same as the original image as a sort of sanity test...
+
 ```
 int main()
 {
@@ -521,8 +593,13 @@ int main()
     return 0;
 }
 ```
-{{ videos/7_* }}
+
+<video width="320" height="240" controls>
+  <source src="./images/7_original_restored.png" type="video/webm">
+</video>
+
 And now we can generate a gaussian blur matrix by writing these functions...
+
 ```
 double gauss(double cx, double cy, double ax, double ay, double a, double x, double y) {
     return a * exp(-1.f * ((((x-cx)*(x-cx))/2.f*ax*ax) + (((y-cy)*(y-cy))/2.f*ay*ay)));
@@ -537,5 +614,7 @@ void fill_blr_gaussian(fft_Matrix_cf* mat) {
     }
 }
 ```
+
 Then we can pair-wise multiply our fourier transformed image by this matrix and see what we get when we perform an inverse fft on the product...
+
 To be continued...
