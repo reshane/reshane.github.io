@@ -405,7 +405,7 @@ And that is how we get our 27 lines of glorious prime finding action, now to run
 And Melissa wants me to do 10_000, so here we go...
 
 <video width="320" height="240" controls>
-  <source src="./images/6_stinky_request_primes_run.png" type="video/webm">
+  <source src="./images/6_stinky_request_primes_run.webm" type="video/webm">
 </video>
 
 So if we want to accept images up to 10_000x10_000, we have to implement 1_229 radixes... Not a super realistic solution, so how does one generate these implementations? There must be a pattern that can be exploited, but for now I'm going to move on to a 2 dimensional implementation without writing any other radixes (to keep things simple for myself).
@@ -595,7 +595,7 @@ int main()
 ```
 
 <video width="320" height="240" controls>
-  <source src="./images/7_original_restored.png" type="video/webm">
+  <source src="./images/7_original_restored.webm" type="video/webm">
 </video>
 
 And now we can generate a gaussian blur matrix by writing these functions...
