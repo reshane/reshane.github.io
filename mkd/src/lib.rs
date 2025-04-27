@@ -11,7 +11,8 @@ pub struct PostTemplate {
     pub contents: String,
 }
 
-const POST_NAMES: [&'static str; 4] = ["aoc-24", "convolution", "image-resizing", "fourier-transforms"];
+mod post_data;
+use crate::post_data::POST_NAMES;
 
 #[wasm_bindgen]
 pub async fn fetch_post(post_title: &str) -> Result<JsValue, JsValue> {
