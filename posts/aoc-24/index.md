@@ -1,10 +1,10 @@
 # Advent of Code 2024
 
-A colleciton of some highs, lows, and buffalos from my advent of code 2024. There will be spoilers. {{ link/[See here|https://github.com/reshane/aoc2024/tree/main] }} for my solutions.
+A colleciton of some highs, lows, and buffalos from my advent of code 2024. There will be spoilers. [See here](https://github.com/reshane/aoc2024/tree/main) for my solutions.
 
 ## Background
 
-I first came across advent of code while watching Alexey Kutepov's youtube videos, specifically {{ link/[this series|https://www.youtube.com/playlist?list=PLpM-Dvs8t0VZNUvTX1pqfpI_tMkhWCLYL] }} where he solves all the problems while exploring templeOS and holy c (all hail king terry).
+I first came across advent of code while watching Alexey Kutepov's youtube videos, specifically [this series](https://www.youtube.com/playlist?list=PLpM-Dvs8t0VZNUvTX1pqfpI_tMkhWCLYL) where he solves all the problems while exploring templeOS and holy c (all hail king terry).
 I would highly recommend watching along with his series from the previous year, where each day is completed using a different language.
 I decided that this year I would be trying to complete all problems in rust, using only the standard library.
 This is mostly because I had been writing a lot of rust in my free time up to this point, but also because I wanted to see if I could learn the standard library well enough to not depend on any crates.
