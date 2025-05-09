@@ -27,9 +27,12 @@ jobs:
       - name: Add wasm target
         run: |
           rustup target add wasm32-unknown-unknown
+      - name: Set up environment
+        run: |
+          export RUSTFLAGS='--cfg getrandom_backend="wasm_js"'
       - name: Build site
         run: |
-          npm run build
+          export RUSTFLAGS='--cfg getrandom_backend="wasm_js"' && npm run build
         working-directory: ./
 
       - name: Setup pages

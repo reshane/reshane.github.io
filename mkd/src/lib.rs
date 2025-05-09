@@ -11,8 +11,8 @@ pub struct PostTemplate {
     pub contents: String,
 }
 
-mod post_data;
-use crate::post_data::POST_NAMES;
+mod site_data;
+use crate::site_data::*;
 
 #[wasm_bindgen]
 pub async fn fetch_post(post_title: &str) -> Result<JsValue, JsValue> {
@@ -77,6 +77,34 @@ pub async fn render_post(post_name: String) {
         post_element.set_class_name("post-contents");
         post_element.set_id(post.title.as_str());
         container.append_child(&post_element).unwrap();
+    }
+}
+
+#[wasm_bindgen]
+pub fn render_demos() {
+    let demo_list = web_sys::window()
+        .unwrap()
+        .document()
+        .unwrap()
+        .get_element_by_id("demo_list")
+        .unwrap();
+    for name in DEMO_NAMES {
+        let demo_element = web_sys::window()
+            .unwrap()
+            .document()
+            .unwrap()
+            .create_element("li")
+            .unwrap();
+        let demo_link = web_sys::window()
+            .unwrap()
+            .document()
+            .unwrap()
+            .create_element("a")
+            .unwrap();
+        demo_link.set_inner_html(&name);
+        demo_link.set_attribute("href", format!("demos/{name}").as_str()).unwrap();
+        demo_element.append_child(&demo_link).unwrap();
+        demo_list.append_child(&demo_element).unwrap();
     }
 }
 

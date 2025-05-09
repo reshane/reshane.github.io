@@ -1,5 +1,8 @@
 {
     "post_names": [
         "aoc-24", "convolution", "image-resizing", "fourier-transforms"
+    ],
+    "demo_names": [
+        "aoc-24-day15", "aoc-24-day16", "maze-gen"
     ]
 }

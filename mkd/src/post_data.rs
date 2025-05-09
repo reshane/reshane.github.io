@@ -1,1 +1,0 @@
-pub const POST_NAMES: [&'static str; 4] = ["aoc-24","convolution","image-resizing","fourier-transforms"];

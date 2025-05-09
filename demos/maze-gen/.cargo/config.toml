@@ -1,0 +1,2 @@
+[env]
+RUSTFLAGS = { value = '--cfg getrandom_backend="wasm_js"', force = true }
