@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["mkd"]
+members = ["mkd", "demos/aoc-24-day15", "demos/aoc-24-day16", "demos/maze-gen"]
 
 [profile.release]
 lto = true
