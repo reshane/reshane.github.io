@@ -1,2 +1,2 @@
-pub const POST_NAMES: [&'static str; 5] = ["aoc-24","convolution","image-resizing","fourier-transforms","golang-strings"];
+pub const POST_NAMES: [&'static str; 6] = ["aoc-24","convolution","image-resizing","fourier-transforms","golang-strings","aoc-25"];
 pub const DEMO_NAMES: [&'static str; 3] = ["aoc-24-day15","aoc-24-day16","maze-gen"];
